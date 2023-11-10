@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.text.DateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "OnsiteSlot")
@@ -21,6 +23,8 @@ public class InPersonSlot {
     private LocalDate appointDate;
     private long slot;
     private long capacity;
+    @OneToMany(mappedBy = "inpersonslot", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PatientRecord> patientRecords=new ArrayList<>();
 
 
 }

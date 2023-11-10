@@ -14,7 +14,9 @@ public class PatientRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long recordId;
-    private long onsiteId;
+    @ManyToOne
+    @JoinColumn(name = "onsite_id")
+    private InPersonSlot onsiteId;
     private long patientId;
     private boolean status;
 

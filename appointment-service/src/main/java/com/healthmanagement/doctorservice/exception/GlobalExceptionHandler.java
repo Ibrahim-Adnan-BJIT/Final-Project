@@ -25,4 +25,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
     }
 
+
+    @ExceptionHandler(InvalidRoomNumber.class) //It used in specific Exception
+    public ResponseEntity<ErrorDetails> handleInvalidRoomNumberError(InvalidRoomNumber authenticationExceptions,
+                                                                  WebRequest webRequest)
+    {
+        ErrorDetails exceptionDetails=new ErrorDetails(
+                LocalDateTime.now(),
+                authenticationExceptions.getMessage(),
+                webRequest.getDescription(false),
+                "Invalid Room Number"
+        );
+        return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
+    }
+
 }

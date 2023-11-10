@@ -27,6 +27,6 @@ public class InPersonSlotServiceImpl implements InPersonSlotService {
         inPersonSlot.setSlot(slotDto.getSlot());
         inPersonSlot.setCapacity(20);
         inPersonSlot.setAppointDate(slotDto.getAppointDate());
-        inPersonSlotRepo.save(inPersonSlot);// Need a Mapping
+        inPersonSlotRepo.save(inPersonSlot);
     }
 }
