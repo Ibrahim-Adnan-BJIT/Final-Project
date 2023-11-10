@@ -12,4 +12,6 @@ public interface IUserInformation {
     public void updateProfile(ProfileDto profileDto);
     public void updateSkills(DoctorsDto doctorsDto);
 
+    public Long getDoctorId(long id);
+
 }

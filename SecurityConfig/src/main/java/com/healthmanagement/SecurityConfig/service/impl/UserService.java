@@ -113,5 +113,12 @@ public class UserService implements IUserInformation {
        return;
     }
 
+    @Override
+    public Long getDoctorId(long id) {
+
+        Doctor doctor=doctorRepo.findByUserId(id);
+        return doctor.getDoctorId();
+    }
+
 
 }

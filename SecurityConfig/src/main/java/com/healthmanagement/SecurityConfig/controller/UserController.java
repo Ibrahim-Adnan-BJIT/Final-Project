@@ -41,4 +41,10 @@ public class UserController {
         userService.updateSkills(doctorsDto);
         return new ResponseEntity<>("Updated Successfully",HttpStatus.ACCEPTED);
     }
+
+    @GetMapping("/getDoctor/{id}")
+    public Long getDoctor(@PathVariable long id)
+    {
+        return userService.getDoctorId(id);
+    }
 }
