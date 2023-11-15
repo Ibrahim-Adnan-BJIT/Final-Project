@@ -47,4 +47,10 @@ public class UserController {
     {
         return userService.getDoctorId(id);
     }
+
+    @GetMapping("/getPatient/{id}")
+    public Long getPatient(@PathVariable long id)
+    {
+        return userService.getPatientId(id);
+    }
 }

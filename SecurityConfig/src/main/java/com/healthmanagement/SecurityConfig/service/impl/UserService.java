@@ -5,13 +5,8 @@ import com.healthmanagement.SecurityConfig.dto.ProfileDto;
 import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
 import com.healthmanagement.SecurityConfig.entity.*;
 import com.healthmanagement.SecurityConfig.exception.ResourceNotFoundException;
-import com.healthmanagement.SecurityConfig.repository.CategoriesRepo;
-import com.healthmanagement.SecurityConfig.repository.DoctorRepo;
-import com.healthmanagement.SecurityConfig.repository.DoctorSpecialityRepo;
-import com.healthmanagement.SecurityConfig.repository.UserRepository;
+import com.healthmanagement.SecurityConfig.repository.*;
 import com.healthmanagement.SecurityConfig.service.IUserInformation;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,13 +22,15 @@ public class UserService implements IUserInformation {
     private final DoctorRepo doctorRepo;
     private final CategoriesRepo categoriesRepo;
     private final DoctorSpecialityRepo doctorSpecialityRepo;
+    private final PatientRepo patientRepo;
 
-    public UserService(UserRepository userRepository, ModelMapper modelMapper, DoctorRepo doctorRepo, CategoriesRepo categoriesRepo, DoctorSpecialityRepo doctorSpecialityRepo) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper, DoctorRepo doctorRepo, CategoriesRepo categoriesRepo, DoctorSpecialityRepo doctorSpecialityRepo, PatientRepo patientRepo) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.doctorRepo = doctorRepo;
         this.categoriesRepo = categoriesRepo;
         this.doctorSpecialityRepo = doctorSpecialityRepo;
+        this.patientRepo = patientRepo;
     }
 
     public UserInformationsDto getUserInformation(long userId) {
@@ -118,6 +115,12 @@ public class UserService implements IUserInformation {
 
         Doctor doctor=doctorRepo.findByUserId(id);
         return doctor.getDoctorId();
+    }
+
+    @Override
+    public Long getPatientId(long id) {
+        Patient patient=patientRepo.findByUserId(id);
+        return patient.getPatientId();
     }
 
 
