@@ -26,10 +26,20 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v2/proxyUser/**").permitAll()
-                        .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/user/**").hasRole(Constants.ROLE_USER)
+
+                        .requestMatchers(HttpMethod.POST, "/api/v2/create/slots").hasRole(Constants.ROLE_DOCTOR)
+                        .requestMatchers(HttpMethod.POST, "/api/v2/cancel/slots/{id}").hasRole(Constants.ROLE_DOCTOR)
+                        .requestMatchers(HttpMethod.POST, "/api/v2/create/slots").hasRole(Constants.ROLE_DOCTOR)
+                        .requestMatchers(HttpMethod.POST, "/api/v2/create/resource/{id}").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/api/v2/create/appointment/{id}").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.POST, "/api/v2/cancel/appointment/{id}").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/user/getDoctor/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v2/user/getPatient/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v2/user/getAllDoctors").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v2/getAllAppointmentByPatientId/{id}").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.POST, "/api/v2/getAllAppointmentByDoctorId/{id}").hasRole(Constants.ROLE_DOCTOR)
+                        .requestMatchers(HttpMethod.POST, "/api/v2/getAllAppointments").hasRole(Constants.ROLE_ADMIN)
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -49,6 +49,7 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.boot:spring-boot-starter-reactor-netty'
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.1'
 }
 
 dependencyManagement {

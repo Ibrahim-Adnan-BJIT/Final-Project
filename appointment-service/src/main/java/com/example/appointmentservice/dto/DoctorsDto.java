@@ -1,4 +1,4 @@
-package com.healthmanagement.SecurityConfig.dto;
+package com.example.appointmentservice.dto;
 
 import lombok.*;
 

@@ -10,9 +10,15 @@ import java.time.LocalTime;
 @Setter
 @Getter
 @Builder
-public class SlotDto {
+public class AppointmentDto {
+    private long appointmentId;
+    private long doctorId;
+    private long patientId;
+    private String location;
     private LocalDate date;
     private LocalTime startTime;
+    private LocalTime endTime;
     private String type;
-
+    private String roomNumber;
+    private String status;
 }

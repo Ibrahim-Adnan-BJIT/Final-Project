@@ -13,8 +13,8 @@ public class GlobalExceptionHandler {
 
 
 
-    @ExceptionHandler(AuthenticationException.class) //It used in specific Exception
-    public ResponseEntity<ErrorDetails> handleAuthenticationError(AuthenticationException authenticationExceptions,
+    @ExceptionHandler(AuthenticationExceptions.class) //It used in specific Exception
+    public ResponseEntity<ErrorDetails> handleAuthenticationError(AuthenticationExceptions authenticationExceptions,
                                                                   WebRequest webRequest)
     {
         ErrorDetails exceptionDetails=new ErrorDetails(
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionDetails, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(AuthenticationException.class) //It used in specific Exception
+    @ExceptionHandler(InvalidRequestException.class) //It used in specific Exception
     public ResponseEntity<ErrorDetails> handleInvalidRequest(InvalidRequestException authenticationExceptions,
                                                                   WebRequest webRequest)
     {

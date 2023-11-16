@@ -8,11 +8,14 @@ import com.healthmanagement.SecurityConfig.exception.ResourceNotFoundException;
 import com.healthmanagement.SecurityConfig.repository.*;
 import com.healthmanagement.SecurityConfig.service.IUserInformation;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -123,5 +126,14 @@ public class UserService implements IUserInformation {
         return patient.getPatientId();
     }
 
+    @Override
+    public List<DoctorsDto> getAllDoctors() {
+       List<Doctor>doctors=doctorRepo.findAll();
+       return   doctors.stream().map((todo) -> modelMapper.map(todo, DoctorsDto.class))
+               .collect(Collectors.toList());
+    }
 
 }
+
+
+

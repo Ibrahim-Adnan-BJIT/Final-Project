@@ -4,6 +4,8 @@ import com.healthmanagement.SecurityConfig.dto.DoctorsDto;
 import com.healthmanagement.SecurityConfig.dto.ProfileDto;
 import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
 
+import java.util.List;
+
 public interface IUserInformation {
     public UserInformationsDto getUserInformation(long userId);
 
@@ -14,5 +16,7 @@ public interface IUserInformation {
 
     public Long getDoctorId(long id);
     public Long getPatientId(long id);
+
+    public List<DoctorsDto>getAllDoctors();
 
 }

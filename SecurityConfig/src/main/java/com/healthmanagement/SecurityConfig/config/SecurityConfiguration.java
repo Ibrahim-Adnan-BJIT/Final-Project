@@ -25,10 +25,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST,"/api/v2/auth/register/patient").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v2/auth/register/doctor").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v2/auth/register/admin").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v2/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v2/user/profile").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/v2/user/update/profile").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/v2/user/skills").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v2/user/getAllDoctors").permitAll()
                         .requestMatchers("/api/v2/user/**").permitAll()
                         .anyRequest().authenticated()
                 )

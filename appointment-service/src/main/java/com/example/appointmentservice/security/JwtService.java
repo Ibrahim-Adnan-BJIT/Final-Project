@@ -1,7 +1,8 @@
 package com.example.appointmentservice.security;
 
 
-import com.example.appointmentservice.exception.AuthenticationException;
+
+import com.example.appointmentservice.exception.AuthenticationExceptions;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -54,7 +55,7 @@ public class JwtService {
         final String userName = extractUsername(token);
 
         if (userName==null || isTokenExpired(token)) {
-            throw new AuthenticationException( "Invalid  token");
+            throw new AuthenticationExceptions( "Invalid  token");
         }
         return true; // Token is valid
     }
@@ -62,7 +63,7 @@ public class JwtService {
     // check token expired
     private boolean isTokenExpired(String token) {
         if (extractExpiration(token).before(new Date())) {
-            throw new AuthenticationException( "Token has expired");
+            throw new AuthenticationExceptions( "Token has expired");
         }
         return false; // Token is not expired
     }
