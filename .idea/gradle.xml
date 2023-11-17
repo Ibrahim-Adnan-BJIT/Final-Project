@@ -13,6 +13,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Clinical-Decision-Support-System-Service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Clinical-Decision-Support-System-Service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/ConfigServer" />
         <option name="gradleJvm" value="corretto-17" />
         <option name="modules">
