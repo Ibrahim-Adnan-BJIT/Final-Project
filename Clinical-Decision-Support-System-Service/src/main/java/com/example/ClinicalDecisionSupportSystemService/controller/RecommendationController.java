@@ -1,20 +1,11 @@
 package com.example.ClinicalDecisionSupportSystemService.controller;
 
-import com.example.ClinicalDecisionSupportSystemService.entity.AllergyRecommendation;
-import com.example.ClinicalDecisionSupportSystemService.entity.BloodPressureRecommendation;
-import com.example.ClinicalDecisionSupportSystemService.entity.BmiRecommendation;
-import com.example.ClinicalDecisionSupportSystemService.entity.DiabetesRecommendation;
-import com.example.ClinicalDecisionSupportSystemService.service.AllergyRecommendationService;
-import com.example.ClinicalDecisionSupportSystemService.service.BloodPressureRecommendationService;
-import com.example.ClinicalDecisionSupportSystemService.service.BmiRecommendationService;
-import com.example.ClinicalDecisionSupportSystemService.service.DiabetesRecommendationService;
+import com.example.ClinicalDecisionSupportSystemService.entity.*;
+import com.example.ClinicalDecisionSupportSystemService.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/recommendation")
@@ -24,6 +15,7 @@ public class RecommendationController {
     private BmiRecommendationService bmiRecommendationService;
     private DiabetesRecommendationService diabetesRecommendationService;
     private AllergyRecommendationService allergyRecommendationService;
+    private RecommendationService recommendationService;
 
     @PutMapping("/update/blood")
     public ResponseEntity<String> updateBlood(@RequestBody BloodPressureRecommendation bloodPressureRecommendation)
@@ -49,5 +41,12 @@ public class RecommendationController {
     {
         allergyRecommendationService.updateAllergyRecom(allergyRecommendation);
         return new ResponseEntity<>("Record inserted successfully", HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/getRecommendationByPatientId")
+    public ResponseEntity<Recommendation> getRecommendationByPatientId()
+    {
+        Recommendation recommendation=recommendationService.getRecommendationByPatientId();
+        return new ResponseEntity<>(recommendation,HttpStatus.FOUND);
     }
 }

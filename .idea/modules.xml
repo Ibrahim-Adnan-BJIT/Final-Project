@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ApiGateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ApiGateway.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Clinical-Decision-Support-System-Service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Clinical-Decision-Support-System-Service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/EurekaServer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/EurekaServer.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Final-Term-Project.iml" filepath="$PROJECT_DIR$/.idea/Final-Term-Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/SecurityConfig.main.iml" filepath="$PROJECT_DIR$/.idea/modules/SecurityConfig.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/appointment-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/appointment-service.main.iml" />
     </modules>
   </component>

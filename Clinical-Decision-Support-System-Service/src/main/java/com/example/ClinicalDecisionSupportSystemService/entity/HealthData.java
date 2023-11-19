@@ -19,7 +19,8 @@ public class HealthData {
     private double height;
     private int weight;
     private double bmi;
-    private long bloodPressure;
+    @Enumerated(EnumType.STRING)
+    private BloodPressure bloodPressure;
     @Enumerated(EnumType.STRING)
     private Allergy allergy;
     @Enumerated(EnumType.STRING)
