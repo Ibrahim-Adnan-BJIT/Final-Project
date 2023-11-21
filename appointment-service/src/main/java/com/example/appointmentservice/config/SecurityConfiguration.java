@@ -11,6 +11,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 import static com.netflix.eventbus.spi.FilterLanguage.Constant;
 
@@ -24,6 +29,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
 
@@ -36,9 +42,16 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v2/user/getDoctor/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v2/user/getPatient/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v2/user/getAllDoctors").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v2/getAllAppointmentByPatientId/{id}").hasRole(Constants.ROLE_PATIENT)
-                        .requestMatchers(HttpMethod.POST, "/api/v2/getAllAppointmentByDoctorId/{id}").hasRole(Constants.ROLE_DOCTOR)
-                        .requestMatchers(HttpMethod.POST, "/api/v2/getAllAppointments").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getAllAppointmentByPatientId/{id}").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getAllAppointmentByDoctorId/{id}").hasRole(Constants.ROLE_DOCTOR)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getAllAppointments").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/api/v2/create/medicine").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/api/v2/update/medicine/{id}").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, "/api/v2/delete/medicine/{id}").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getAllMedicine").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getMedicineById/{id}").hasRole(Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getAllSlotsByDoctorId/{id}").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getMyAllSlots").hasRole(Constants.ROLE_DOCTOR)
 
                         .anyRequest().authenticated()
                 )
@@ -47,5 +60,29 @@ public class SecurityConfiguration {
         ;
 
         return http.build();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:5173");
+        //config.addAllowedHeader("Authorization");
+
+        config.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "Accept",
+                "X-Requested-With",
+                "Cache-Control"
+        ));
+
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("DELETE");
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

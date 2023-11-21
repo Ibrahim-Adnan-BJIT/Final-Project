@@ -143,6 +143,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             var jwtToken = jwtService.generateToken(user);
             return LoginResponseDto.builder()
                     .email(user.getEmail())
+                    .role(user.getRole().toString())
                     .token(jwtToken)
                     .build();
         } catch (BadCredentialsException e) {

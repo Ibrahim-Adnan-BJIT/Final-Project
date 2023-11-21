@@ -2,7 +2,8 @@ package com.example.communityservice.security;
 
 
 
-import com.example.ClinicalDecisionSupportSystemService.exception.AuthenticationExceptions;
+
+import com.example.communityservice.exception.AuthenticationExceptions;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

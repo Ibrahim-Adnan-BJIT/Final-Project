@@ -47,6 +47,16 @@ public class PostServiceImpl implements PostService {
     public void deletePosts(long postId) {
 
         Post post1=postRepo.findById(postId).orElseThrow(()->new InvalidRequestException("Invalid Post Id"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        long id1 =  Long.parseLong(authentication.getName());
+        Long patientId=webClient.get()
+                .uri("http://localhost:9898/api/v2/user/getPatient/{id}", id1)
+                .retrieve()
+                .bodyToMono(Long.class)
+                .block();
+        if(post1.getPatientId()!=patientId)
+            throw new InvalidRequestException("Its Not Your Post so dont try it again");
         postRepo.deleteById(postId);
     }
 

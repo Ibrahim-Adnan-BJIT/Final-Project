@@ -3,6 +3,7 @@ package com.healthmanagement.SecurityConfig.controller;
 
 import com.healthmanagement.SecurityConfig.dto.DoctorsDto;
 import com.healthmanagement.SecurityConfig.dto.ProfileDto;
+import com.healthmanagement.SecurityConfig.dto.SearchDoctorDto;
 import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
 import com.healthmanagement.SecurityConfig.service.IUserInformation;
 import lombok.AllArgsConstructor;
@@ -57,9 +58,9 @@ public class UserController {
     }
 
     @GetMapping("/getAllDoctors")
-    public ResponseEntity<List<DoctorsDto>> getAllDoctors()
+    public ResponseEntity<List<SearchDoctorDto>> getAllDoctors()
     {
-        List<DoctorsDto>doctorsDtos=userService.getAllDoctors();
-        return new ResponseEntity<>(doctorsDtos,HttpStatus.FOUND);
+        List<SearchDoctorDto>doctorsDtos=userService.getAllDoctors();
+        return new ResponseEntity<>(doctorsDtos,HttpStatus.OK);
     }
 }

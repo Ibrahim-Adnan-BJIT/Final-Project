@@ -1,5 +1,6 @@
 package com.example.appointmentservice.service.impl;
 
+import com.example.appointmentservice.dto.AppointmentDto;
 import com.example.appointmentservice.dto.SlotDto;
 import com.example.appointmentservice.entity.Slot;
 import com.example.appointmentservice.exception.InvalidRequestException;
@@ -8,6 +9,7 @@ import com.example.appointmentservice.service.SlotService;
 
 import lombok.AllArgsConstructor;
 import org.aspectj.weaver.Lint;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +30,7 @@ public class SlotServiceImpl implements SlotService {
     private final WebClient webClient;
 
     private SlotRepo slotRepo;
+    private ModelMapper modelMapper;
 
 
 
@@ -80,5 +84,26 @@ public class SlotServiceImpl implements SlotService {
        }
        slot.get().setStatus("Unavailable");
        slotRepo.save(slot.get());
+    }
+
+    @Override
+    public List<Slot> getAllSlotsByDoctorId(long id) {
+        List<Slot> slots=slotRepo.findByDoctorId(id);
+        if(slots.isEmpty())
+            throw new InvalidRequestException("Invalid Doctor Id");
+       return slots;
+    }
+
+    @Override
+    public List<Slot> getMyAllSlots() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        long id = Long.parseLong(authentication.getName());
+        Long doctorId = webClient.get()
+                .uri("http://localhost:9898/api/v2/user/getDoctor/" + id)
+                .retrieve()
+                .bodyToMono(Long.class)
+                .block();
+        List<Slot>slots=slotRepo.findByDoctorId(id);
+        return slots;
     }
 }

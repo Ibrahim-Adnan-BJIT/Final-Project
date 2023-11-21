@@ -1,5 +1,6 @@
 package com.example.communityservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,11 +14,15 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
+
 public class Post {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long postId;
     private long patientId;
     private String description;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;

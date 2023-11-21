@@ -2,6 +2,7 @@ package com.healthmanagement.SecurityConfig.service.impl;
 
 import com.healthmanagement.SecurityConfig.dto.DoctorsDto;
 import com.healthmanagement.SecurityConfig.dto.ProfileDto;
+import com.healthmanagement.SecurityConfig.dto.SearchDoctorDto;
 import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
 import com.healthmanagement.SecurityConfig.entity.*;
 import com.healthmanagement.SecurityConfig.exception.ResourceNotFoundException;
@@ -13,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -126,11 +128,25 @@ public class UserService implements IUserInformation {
         return patient.getPatientId();
     }
 
+
+
     @Override
-    public List<DoctorsDto> getAllDoctors() {
+    public List<SearchDoctorDto> getAllDoctors() {
        List<Doctor>doctors=doctorRepo.findAll();
-       return   doctors.stream().map((todo) -> modelMapper.map(todo, DoctorsDto.class))
-               .collect(Collectors.toList());
+       List<SearchDoctorDto>searchDoctorDtos=new ArrayList<>();
+       for(Doctor doctor:doctors)
+       {
+           Optional<User> user=userRepository.findById(doctor.getUserId());
+           String firstname=user.get().getFirstName();
+           String lastName=user.get().getLastName();
+           SearchDoctorDto searchDoctorDto=new SearchDoctorDto();
+           searchDoctorDto.setDoctorId(doctor.getDoctorId());
+           searchDoctorDto.setFirstName(firstname);
+           searchDoctorDto.setLastName(lastName);
+           searchDoctorDto.setSpeciality(doctor.getSpeciality());
+           searchDoctorDtos.add((searchDoctorDto));
+       }
+       return searchDoctorDtos;
     }
 
 }

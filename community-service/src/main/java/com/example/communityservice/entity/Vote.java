@@ -1,5 +1,6 @@
 package com.example.communityservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class Vote {
     private long patientId;
     private boolean upVote;
     private boolean downVote;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;

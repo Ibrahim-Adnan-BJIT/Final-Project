@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "group")
+@Table(name = "groups")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -19,7 +19,9 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long groupId;
+
     private String groupName;
+
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Post>posts=new ArrayList<>();
 }

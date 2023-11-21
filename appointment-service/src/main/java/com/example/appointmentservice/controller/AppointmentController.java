@@ -3,7 +3,10 @@ package com.example.appointmentservice.controller;
 import com.example.appointmentservice.dto.AppointmentDto;
 import com.example.appointmentservice.dto.ResourceAllocationDto;
 import com.example.appointmentservice.dto.SlotDto;
+import com.example.appointmentservice.entity.Medicine;
+import com.example.appointmentservice.entity.Slot;
 import com.example.appointmentservice.service.AppointmentService;
+import com.example.appointmentservice.service.MedicineService;
 import com.example.appointmentservice.service.ResourceAllocationService;
 import com.example.appointmentservice.service.SlotService;
 import lombok.AllArgsConstructor;
@@ -25,6 +28,7 @@ public class AppointmentController {
     private ResourceAllocationService resourceAllocationService;
     @Autowired
     private AppointmentService appointmentService;
+    private MedicineService medicineService;
 
     @PostMapping("/create/slots")
     public ResponseEntity<SlotDto> createSlots(@RequestBody SlotDto slotDto)
@@ -64,20 +68,69 @@ public class AppointmentController {
     public ResponseEntity<List<AppointmentDto>> getAllAppointmentByPatientId(@PathVariable long id)
     {
         List<AppointmentDto>appointmentDtos=appointmentService.getAppointmentByPatientId(id);
-        return new ResponseEntity<>(appointmentDtos,HttpStatus.FOUND);
+        return new ResponseEntity<>(appointmentDtos,HttpStatus.OK);
     }
 
     @GetMapping("/getAllAppointmentByDoctorId/{id}")
     public ResponseEntity<List<AppointmentDto>> getAllAppointmentByDoctorId(@PathVariable long id)
     {
         List<AppointmentDto>appointmentDtos=appointmentService.getAppointmentByDoctorId(id);
-        return new ResponseEntity<>(appointmentDtos,HttpStatus.FOUND);
+        return new ResponseEntity<>(appointmentDtos,HttpStatus.OK);
     }
 
     @GetMapping("/getAllAppointments")
     public ResponseEntity<List<AppointmentDto>> getAllAppointments()
     {
         List<AppointmentDto>appointmentDtos=appointmentService.getAllAppointments();
-        return new ResponseEntity<>(appointmentDtos,HttpStatus.FOUND);
+        return new ResponseEntity<>(appointmentDtos,HttpStatus.OK);
+    }
+
+    @PostMapping("/create/medicine")
+    public ResponseEntity<String> createMedicine(@RequestBody Medicine medicine)
+    {
+        medicineService.createMedicine(medicine);
+        return new ResponseEntity<>("Medicine Added ",HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update/medicine/{id}")
+    public ResponseEntity<String> updateMedicine(@RequestBody Medicine medicine,@PathVariable long id)
+    {
+        medicineService.updateMedicine(medicine,id);
+        return new ResponseEntity<>("Updated Successfully",HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/delete/medicine/{id}")
+    public ResponseEntity<String> deleteMedicine(@PathVariable long id)
+    {
+        medicineService.deleteMedicine(id);
+        return new ResponseEntity<>("Deleted Successfully",HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllMedicine")
+    public ResponseEntity<List<Medicine>>getAllMedicine()
+    {
+        List<Medicine>medicines=medicineService.getAllMedicine();
+        return new ResponseEntity<>(medicines,HttpStatus.OK);
+    }
+
+    @GetMapping("/getMedicineById/{id}")
+    public ResponseEntity<Medicine> getMedicineById(@PathVariable long id)
+    {
+        Medicine medicine=medicineService.getMedicineById(id);
+        return new ResponseEntity<>(medicine,HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllSlotsByDoctorId/{id}")
+    public ResponseEntity<List<Slot>> getAllSlotsByDoctorId(@PathVariable long id)
+    {
+        List<Slot> slotDtos=slotService.getAllSlotsByDoctorId(id);
+        return new ResponseEntity<>(slotDtos,HttpStatus.OK);
+    }
+
+    @GetMapping("/getMyAllSlots")
+    public ResponseEntity<List<Slot>> getMyAllSlots()
+    {
+        List<Slot>slotDtos=slotService.getMyAllSlots();
+        return new ResponseEntity<>(slotDtos,HttpStatus.OK);
     }
 }

@@ -100,6 +100,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             Slot slot = appointment.get().getSlot();
             slot.setStatus("Available");
             slotRepo.save(slot);
+            appointmentRepo.deleteById(appointId);
         }
         else
             throw new InvalidRequestException("Sorry You cant cancel appointment now");

@@ -2,6 +2,7 @@ package com.healthmanagement.SecurityConfig.service;
 
 import com.healthmanagement.SecurityConfig.dto.DoctorsDto;
 import com.healthmanagement.SecurityConfig.dto.ProfileDto;
+import com.healthmanagement.SecurityConfig.dto.SearchDoctorDto;
 import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public interface IUserInformation {
     public Long getDoctorId(long id);
     public Long getPatientId(long id);
 
-    public List<DoctorsDto>getAllDoctors();
+
+
+    public List<SearchDoctorDto> getAllDoctors();
 
 }
