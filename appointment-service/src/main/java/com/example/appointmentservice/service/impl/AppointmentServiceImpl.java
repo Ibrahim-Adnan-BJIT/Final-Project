@@ -109,7 +109,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentDto> getAppointmentByPatientId(long id) {
+    public List<AppointmentDto> getAppointmentByPatientId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         long id1 =  Long.parseLong(authentication.getName());
         Long patientId=webClient.get()
@@ -117,17 +117,14 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .retrieve()
                 .bodyToMono(Long.class)
                 .block();
-        if(id!=patientId)
-        {
-            throw new InvalidRequestException("You cant see others Appointments");
-        }
-        List<Appointment>appointments=appointmentRepo.findByPatientId(id);
+
+        List<Appointment>appointments=appointmentRepo.findByPatientId(id1);
        return appointments.stream().map((todo) -> modelMapper.map(todo, AppointmentDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<AppointmentDto> getAppointmentByDoctorId(long id) {
+    public List<AppointmentDto> getAppointmentByDoctorId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         long id1 = Long.parseLong(authentication.getName());
         Long doctorId = webClient.get()
@@ -135,11 +132,8 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .retrieve()
                 .bodyToMono(Long.class)
                 .block();
-        if(id!=doctorId)
-        {
-            throw new InvalidRequestException("Sorry you cant access this site");
-        }
-        List<Appointment>appointments=appointmentRepo.findByDoctorId(id);
+
+        List<Appointment>appointments=appointmentRepo.findByDoctorId(id1);
         return appointments.stream().map((todo) -> modelMapper.map(todo, AppointmentDto.class))
                 .collect(Collectors.toList());
 

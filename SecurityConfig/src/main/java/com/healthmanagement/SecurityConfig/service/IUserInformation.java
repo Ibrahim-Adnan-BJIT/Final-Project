@@ -18,7 +18,9 @@ public interface IUserInformation {
     public Long getDoctorId(long id);
     public Long getPatientId(long id);
 
+    public String getPatientName(long patientId);
 
+    public String getDoctorName(long doctorId);
 
     public List<SearchDoctorDto> getAllDoctors();
 

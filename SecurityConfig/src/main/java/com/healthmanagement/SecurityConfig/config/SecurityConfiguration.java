@@ -38,6 +38,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT,"/api/v2/user/update/profile").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/api/v2/user/skills").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v2/user/getAllDoctors").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v2/user/getPatientName/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v2/user/getDoctorName/**").permitAll()
                         .requestMatchers("/api/v2/user/**").permitAll()
                         .anyRequest().authenticated()
                 )

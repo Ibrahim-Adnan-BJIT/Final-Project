@@ -44,6 +44,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/api/community/downVotes/{id}").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.GET, "/api/community/getAllUpVotes/{id}").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.GET, "/api/community/getAllDownVotes/{id}").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.GET, "/api/community/getSinglePost/{id}").hasRole(Constants.ROLE_PATIENT)
 
 
                         .anyRequest().authenticated()

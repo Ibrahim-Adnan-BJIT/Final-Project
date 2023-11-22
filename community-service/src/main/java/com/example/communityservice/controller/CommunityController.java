@@ -1,5 +1,6 @@
 package com.example.communityservice.controller;
 
+import com.example.communityservice.dto.PostDetails;
 import com.example.communityservice.entity.Group;
 import com.example.communityservice.entity.Post;
 import com.example.communityservice.service.GroupService;
@@ -34,14 +35,14 @@ public class CommunityController {
     @PutMapping("/update/group/{groupId}")
     public ResponseEntity<String> updateGroup(@RequestBody Group group, @PathVariable long groupId) {
         groupService.updateGroup(group, groupId);
-        return new ResponseEntity<>("Updated Successfully", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Updated Successfully", HttpStatus.OK);
     }
 
 
     @DeleteMapping("/delete/group/{groupId}")
     public ResponseEntity<String> deleteGroup(@PathVariable long groupId) {
         groupService.deleteGroup(groupId);
-        return new ResponseEntity<>("Deleted Successfully", HttpStatus.GONE);
+        return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
     }
 
 
@@ -62,56 +63,62 @@ public class CommunityController {
     @PutMapping("/update/post/{postId}")
     public ResponseEntity<String> updatePosts(@RequestBody Post post, @PathVariable long postId) {
         postService.updatePosts(post, postId);
-        return new ResponseEntity<>("Updated Successfully", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Updated Successfully", HttpStatus.OK);
     }
 
 
     @DeleteMapping("/delete/post/{id}")
     public ResponseEntity<String> deletePosts(@PathVariable long id) {
         postService.deletePosts(id);
-        return new ResponseEntity<>("Deleted Successfully", HttpStatus.GONE);
+        return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
     }
 
 
     @GetMapping("/getByPatientIdAndGroupId/{groupId}")
     public ResponseEntity<List<Post>> getPatientAndGroupId(@PathVariable long groupId) {
         List<Post> posts = postService.getAllPostByPatientIdWithPerticularGroupId(groupId);
-        return new ResponseEntity<>(posts, HttpStatus.FOUND);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
 
     @GetMapping("/getByGroupId/{groupId}")
     public ResponseEntity<List<Post>> getByGroupId(@PathVariable long groupId) {
         List<Post> posts = postService.getAllPostByGroupId(groupId);
-        return new ResponseEntity<>(posts, HttpStatus.FOUND);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
 
     @PutMapping("/upVotes/{id}")
     public ResponseEntity<String> upVote(@PathVariable long id) {
         voteService.upVotes(id);
-        return new ResponseEntity<>("UpVoted", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("UpVoted", HttpStatus.OK);
     }
 
 
     @PutMapping("/downVotes/{id}")
     public ResponseEntity<String> downVote(@PathVariable long id) {
         voteService.downVote(id);
-        return new ResponseEntity<>("DownVoted", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("DownVoted", HttpStatus.OK);
     }
 
 
     @GetMapping("/getAllUpVotes/{id}")
     public ResponseEntity<Long> getAllUpVotes(@PathVariable long id) {
         long cnt = voteService.getAllUpVotes(id);
-        return new ResponseEntity<>(cnt, HttpStatus.FOUND);
+        return new ResponseEntity<>(cnt, HttpStatus.OK);
     }
 
 
     @GetMapping("/getAllDownVotes/{id}")
     public ResponseEntity<Long> getAllDownVotes(@PathVariable long id) {
         long cnt = voteService.getAllDownVotes(id);
-        return new ResponseEntity<>(cnt, HttpStatus.FOUND);
+        return new ResponseEntity<>(cnt, HttpStatus.OK);
     }
 
+    @GetMapping("/getSinglePost/{id}")
+    public ResponseEntity<PostDetails> getSinglePost(@PathVariable long id)
+    {
+        PostDetails postDetails=postService.getSinglePostDetils(id);
+        return new ResponseEntity<>(postDetails,HttpStatus.OK);
+    }
 }

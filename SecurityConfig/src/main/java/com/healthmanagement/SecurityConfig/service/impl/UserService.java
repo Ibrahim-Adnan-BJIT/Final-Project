@@ -5,6 +5,7 @@ import com.healthmanagement.SecurityConfig.dto.ProfileDto;
 import com.healthmanagement.SecurityConfig.dto.SearchDoctorDto;
 import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
 import com.healthmanagement.SecurityConfig.entity.*;
+import com.healthmanagement.SecurityConfig.exception.AuthenticationExceptions;
 import com.healthmanagement.SecurityConfig.exception.ResourceNotFoundException;
 import com.healthmanagement.SecurityConfig.repository.*;
 import com.healthmanagement.SecurityConfig.service.IUserInformation;
@@ -128,6 +129,21 @@ public class UserService implements IUserInformation {
         return patient.getPatientId();
     }
 
+    @Override
+    public String getPatientName(long patientId) {
+       Patient patient=patientRepo.findById(patientId).orElseThrow(()->new AuthenticationExceptions("Invalid patientId"));
+
+       Optional<User> user=userRepository.findById(patient.getUserId());
+       return user.get().getFirstName()+" "+user.get().getLastName();
+
+    }
+
+    @Override
+    public String getDoctorName(long doctorId) {
+       Doctor doctor=doctorRepo.findById(doctorId).orElseThrow(()->new AuthenticationExceptions("Invalid doctorId"));
+        Optional<User> user=userRepository.findById(doctor.getUserId());
+        return user.get().getFirstName()+" "+user.get().getLastName();
+    }
 
 
     @Override

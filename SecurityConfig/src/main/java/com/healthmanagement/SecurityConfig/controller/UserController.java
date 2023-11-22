@@ -63,4 +63,18 @@ public class UserController {
         List<SearchDoctorDto>doctorsDtos=userService.getAllDoctors();
         return new ResponseEntity<>(doctorsDtos,HttpStatus.OK);
     }
+
+    @GetMapping("/getPatientName/{id}")
+    public ResponseEntity<String> getPatientName(@PathVariable long id)
+    {
+        String name=userService.getPatientName(id);
+        return new ResponseEntity<>(name,HttpStatus.OK);
+    }
+
+    @GetMapping("/getDoctorName/{id}")
+    public ResponseEntity<String>getDoctorName(@PathVariable long id)
+    {
+        String name=userService.getDoctorName(id);
+        return new ResponseEntity<>(name,HttpStatus.OK);
+    }
 }

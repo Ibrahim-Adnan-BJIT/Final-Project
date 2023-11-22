@@ -1,5 +1,6 @@
 package com.example.communityservice.service;
 
+import com.example.communityservice.dto.PostDetails;
 import com.example.communityservice.entity.Post;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public interface PostService {
     void updatePosts(Post post,long postId);
 
     void deletePosts(long postId);
+
+    PostDetails getSinglePostDetils(long postId);
 
 
     List<Post> getAllPostByPatientIdWithPerticularGroupId(long groupId);

@@ -9,7 +9,7 @@ public interface AppointmentService {
     public void createAppointment(long slotId);
     public void cancelAppointment(long appointId);
 
-    public List<AppointmentDto> getAppointmentByPatientId(long id);
-    public List<AppointmentDto> getAppointmentByDoctorId(long id);
+    public List<AppointmentDto> getAppointmentByPatientId();
+    public List<AppointmentDto> getAppointmentByDoctorId();
     public List<AppointmentDto>getAllAppointments();
 }

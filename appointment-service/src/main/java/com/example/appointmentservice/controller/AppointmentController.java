@@ -64,17 +64,17 @@ public class AppointmentController {
         return new ResponseEntity<>("Appointment cancelled successfully",HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/getAllAppointmentByPatientId/{id}")
-    public ResponseEntity<List<AppointmentDto>> getAllAppointmentByPatientId(@PathVariable long id)
+    @GetMapping("/getAllAppointmentByPatientId")
+    public ResponseEntity<List<AppointmentDto>> getAllAppointmentByPatientId()
     {
-        List<AppointmentDto>appointmentDtos=appointmentService.getAppointmentByPatientId(id);
+        List<AppointmentDto>appointmentDtos=appointmentService.getAppointmentByPatientId();
         return new ResponseEntity<>(appointmentDtos,HttpStatus.OK);
     }
 
-    @GetMapping("/getAllAppointmentByDoctorId/{id}")
-    public ResponseEntity<List<AppointmentDto>> getAllAppointmentByDoctorId(@PathVariable long id)
+    @GetMapping("/getAllAppointmentByDoctorId")
+    public ResponseEntity<List<AppointmentDto>> getAllAppointmentByDoctorId()
     {
-        List<AppointmentDto>appointmentDtos=appointmentService.getAppointmentByDoctorId(id);
+        List<AppointmentDto>appointmentDtos=appointmentService.getAppointmentByDoctorId();
         return new ResponseEntity<>(appointmentDtos,HttpStatus.OK);
     }
 
