@@ -28,7 +28,7 @@ public class UserController {
     public ResponseEntity<ProfileDto> getProfile()
     {
         ProfileDto profileDto=userService.getProfile();
-        return new ResponseEntity<>(profileDto, HttpStatus.FOUND);
+        return new ResponseEntity<>(profileDto, HttpStatus.OK);
     }
 
     @PutMapping("/update/profile")

@@ -14,7 +14,7 @@ import lombok.*;
 @Builder
 public class HealthDataDto {
     private long recordId;
-    private int height;
+    private double height;
     private int weight;
     @Enumerated(EnumType.STRING)
     private BloodPressure bloodPressure;

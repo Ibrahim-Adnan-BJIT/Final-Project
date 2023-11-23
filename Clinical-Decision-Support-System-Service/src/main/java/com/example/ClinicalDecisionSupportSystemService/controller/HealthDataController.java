@@ -1,14 +1,14 @@
 package com.example.ClinicalDecisionSupportSystemService.controller;
 
 import com.example.ClinicalDecisionSupportSystemService.dto.HealthDataDto;
+import com.example.ClinicalDecisionSupportSystemService.entity.HealthData;
 import com.example.ClinicalDecisionSupportSystemService.service.HealthDataService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/healthdata")
@@ -20,6 +20,13 @@ public class HealthDataController {
     public ResponseEntity<String> updateRecord(@RequestBody HealthDataDto healthDataDto)
     {
         healthDataService.storeHealthData(healthDataDto);
-        return new ResponseEntity<>("Health Record Updated", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Health Record Updated", HttpStatus.OK);
+    }
+
+    @GetMapping("/get/healthData")
+    public ResponseEntity<Object> getHealthData()
+    {
+        Optional<HealthData> healthData=healthDataService.getHealthData();
+        return new ResponseEntity<>(healthData.get(),HttpStatus.OK);
     }
 }

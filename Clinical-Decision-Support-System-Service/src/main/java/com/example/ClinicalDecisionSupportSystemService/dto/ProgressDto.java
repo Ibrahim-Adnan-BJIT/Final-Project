@@ -8,6 +8,7 @@ import lombok.*;
 @Getter
 @Builder
 public class ProgressDto {
+    private long goalId;
     private String description;
     private int progression;
 }

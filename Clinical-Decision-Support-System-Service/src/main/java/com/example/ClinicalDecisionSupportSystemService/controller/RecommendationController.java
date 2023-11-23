@@ -47,6 +47,6 @@ public class RecommendationController {
     public ResponseEntity<Recommendation> getRecommendationByPatientId()
     {
         Recommendation recommendation=recommendationService.getRecommendationByPatientId();
-        return new ResponseEntity<>(recommendation,HttpStatus.FOUND);
+        return new ResponseEntity<>(recommendation,HttpStatus.OK);
     }
 }

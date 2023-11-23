@@ -19,33 +19,33 @@ public class ProgressController {
     public ResponseEntity<String> create(@RequestBody ProgressDto progressDto)
     {
        progressService.createProgress(progressDto);
-       return new ResponseEntity<>("Progress Added", HttpStatus.CREATED);
+       return new ResponseEntity<>("Progress Added", HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@RequestBody ProgressDto progressDto,@PathVariable long id)
     {
         progressService.updateProgress(progressDto,id);
-        return new ResponseEntity<>("Progress Status Changed", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Progress Status Changed", HttpStatus.OK);
     }
     @GetMapping("/getCompletedProgress")
     public ResponseEntity<List<ProgressDto>> getCompletedProgress()
     {
         List<ProgressDto> progressDtos=progressService.completedProgressesByPatientId();
-        return new ResponseEntity<>(progressDtos,HttpStatus.FOUND);
+        return new ResponseEntity<>(progressDtos,HttpStatus.OK);
     }
     @GetMapping("/getInCompletedProgress")
     public ResponseEntity<List<ProgressDto>> getInCompletedProgress()
     {
         List<ProgressDto> progressDtos=progressService.incompleteProgressesByPatientId();
-        return new ResponseEntity<>(progressDtos,HttpStatus.FOUND);
+        return new ResponseEntity<>(progressDtos,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable long id)
     {
         progressService.deleteProgress(id);
-        return new ResponseEntity<>("Deleted Successfully",HttpStatus.GONE);
+        return new ResponseEntity<>("Deleted Successfully",HttpStatus.OK);
     }
 
 }

@@ -32,6 +32,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(HttpMethod.PUT, "/api/healthdata/update/record").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.GET, "/api/healthdata/get/healthData").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.POST, "/api/progress/create").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.PUT, "/api/progress/update/{id}").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.GET, "/api/progress/getCompletedProgress").hasRole(Constants.ROLE_PATIENT)

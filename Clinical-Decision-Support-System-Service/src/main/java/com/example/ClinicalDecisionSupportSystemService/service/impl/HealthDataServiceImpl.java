@@ -6,7 +6,6 @@ import com.example.ClinicalDecisionSupportSystemService.exception.InvalidRequest
 import com.example.ClinicalDecisionSupportSystemService.repository.*;
 import com.example.ClinicalDecisionSupportSystemService.service.HealthDataService;
 import lombok.AllArgsConstructor;
-import org.apache.catalina.LifecycleState;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -246,5 +245,11 @@ public class HealthDataServiceImpl implements HealthDataService {
             recommendationRepo.save(recommendation);
 
         }
+    }
+
+    @Override
+    public Optional<HealthData> getHealthData() {
+        HealthData healthData=healthDataRepo.findById(1L).orElseThrow(()->new InvalidRequestException("Enter Your health data Please"));
+        return Optional.ofNullable(healthData);
     }
 }
