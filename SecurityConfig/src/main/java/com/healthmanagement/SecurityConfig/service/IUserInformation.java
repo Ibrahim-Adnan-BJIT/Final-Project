@@ -4,6 +4,7 @@ import com.healthmanagement.SecurityConfig.dto.DoctorsDto;
 import com.healthmanagement.SecurityConfig.dto.ProfileDto;
 import com.healthmanagement.SecurityConfig.dto.SearchDoctorDto;
 import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
+import com.healthmanagement.SecurityConfig.entity.Speciality;
 
 import java.util.List;
 
@@ -23,5 +24,11 @@ public interface IUserInformation {
     public String getDoctorName(long doctorId);
 
     public List<SearchDoctorDto> getAllDoctors();
+
+    public String getEmailForPatient(long patientId);
+    public String getEmailForDoctor(long doctorId);
+
+    List<SearchDoctorDto> getDoctorsBySpeciality(Speciality speciality);
+    List<SearchDoctorDto>getDoctorsByFirstName(String name);
 
 }

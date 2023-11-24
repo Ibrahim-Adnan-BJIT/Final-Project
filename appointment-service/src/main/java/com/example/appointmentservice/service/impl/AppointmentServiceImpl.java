@@ -2,10 +2,12 @@ package com.example.appointmentservice.service.impl;
 
 import com.example.appointmentservice.dto.AppointmentDto;
 import com.example.appointmentservice.entity.Appointment;
+import com.example.appointmentservice.entity.Notification;
 import com.example.appointmentservice.entity.ResourceAllocation;
 import com.example.appointmentservice.entity.Slot;
 import com.example.appointmentservice.exception.InvalidRequestException;
 import com.example.appointmentservice.repository.AppointmentRepo;
+import com.example.appointmentservice.repository.NotificationRepo;
 import com.example.appointmentservice.repository.ResourceAllocationRepo;
 import com.example.appointmentservice.repository.SlotRepo;
 import com.example.appointmentservice.service.AppointmentService;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,6 +38,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     private ResourceAllocationRepo resourceAllocationRepo;
 
     private ModelMapper modelMapper;
+    private NotificationRepo notificationRepo;
+    private EmailService emailService;
 
 
     @Override
@@ -76,6 +81,63 @@ public class AppointmentServiceImpl implements AppointmentService {
         slot.get().setStatus("Booked");
         slotRepo.save(slot.get());
 
+        Notification notification=new Notification();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String dateString = slot.get().getDate().format(formatter);
+        dateString+=" is your next appointment date, please reach there on time ";
+        notification.setMessage(dateString);
+        notification.setDoctorStatus(false);
+        notification.setPatientStatus(false);
+        notification.setPatientId(patientId);
+        notification.setDoctorId(slot.get().getDoctorId());
+        notificationRepo.save(notification);
+        String toPatient=webClient.get()
+                .uri("http://localhost:9898/api/v2/user/getEmailForPatient/{id}", patientId)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        toPatient.trim();
+
+        String toDoctor=webClient.get()
+                .uri("http://localhost:9898/api/v2/user/getEmailForDoctor/{id}", slot.get().getDoctorId())
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        toDoctor.trim();
+
+
+
+        String patientName=webClient.get()
+                .uri("http://localhost:9898/api/v2/user/getPatientName/{id}", patientId)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        String doctorName=webClient.get()
+                .uri("http://localhost:9898/api/v2/user/getDoctorName/{id}", slot.get().getDoctorId())
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        String topicPatient="Hello "+patientName+" ,Hope you are doing well . Your appointment with "+doctorName+" has been booked successfully .For further queries visit our website .Thank you " +
+                "Regards  Admin Expo Health Care";
+        String topicDoctor="Hello Doctor "+doctorName+" ,Hope you are doing well . You have an appointment with"+patientName+" In the Upcoming week  .For further queries visit our website .Thank you " +
+                "Regards  Admin Expo Health Care";
+        String subject="Appointment Notification";
+
+        if (toPatient != null && !toPatient.isEmpty()) {
+            emailService.sendEmail(toPatient, subject, topicPatient);
+        } else {
+           throw new InvalidRequestException("Invalid Email Account");
+        }
+
+        if (toDoctor != null && !toDoctor.isEmpty()) {
+            emailService.sendEmail(toDoctor, subject, topicDoctor);
+        } else {
+           throw new InvalidRequestException("Invalid Email Account");
+        }
+
+     ;
     }
 
     @Override

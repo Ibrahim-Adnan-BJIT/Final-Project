@@ -5,6 +5,7 @@ import com.healthmanagement.SecurityConfig.dto.DoctorsDto;
 import com.healthmanagement.SecurityConfig.dto.ProfileDto;
 import com.healthmanagement.SecurityConfig.dto.SearchDoctorDto;
 import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
+import com.healthmanagement.SecurityConfig.entity.Speciality;
 import com.healthmanagement.SecurityConfig.service.IUserInformation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -76,5 +77,32 @@ public class UserController {
     {
         String name=userService.getDoctorName(id);
         return new ResponseEntity<>(name,HttpStatus.OK);
+    }
+
+    @GetMapping("/getEmailForDoctor/{id}")
+    public ResponseEntity<String> getEmailForDoctor(@PathVariable long id)
+    {
+        String email= userService.getEmailForDoctor(id);
+        return new ResponseEntity<>(email,HttpStatus.OK);
+    }
+    @GetMapping("/getEmailForPatient/{id}")
+    public ResponseEntity<String> getEmailForPatient(@PathVariable long id)
+    {
+        String email= userService.getEmailForPatient(id);
+        return new ResponseEntity<>(email,HttpStatus.OK);
+    }
+
+    @GetMapping("/getDoctorsBySpeciality/{speciality}")
+    public ResponseEntity<List<SearchDoctorDto>> getDoctorsBySpeciality(@PathVariable Speciality speciality)
+    {
+        List<SearchDoctorDto>searchDoctorDtos=userService.getDoctorsBySpeciality(speciality);
+        return new ResponseEntity<>(searchDoctorDtos,HttpStatus.OK);
+    }
+
+    @GetMapping("/getDoctorsByName/{name}")
+    public ResponseEntity<List<SearchDoctorDto>> getDoctorsByName(@PathVariable String name)
+    {
+        List<SearchDoctorDto>searchDoctorDtos=userService.getDoctorsByFirstName(name);
+        return new ResponseEntity<>(searchDoctorDtos,HttpStatus.OK);
     }
 }

@@ -165,6 +165,64 @@ public class UserService implements IUserInformation {
        return searchDoctorDtos;
     }
 
+    @Override
+    public String getEmailForPatient(long patientId) {
+        Patient patient=patientRepo.findById(patientId).orElseThrow(()->new AuthenticationExceptions("Invalid patientId"));
+
+        Optional<User> user=userRepository.findById(patient.getUserId());
+        return user.get().getEmail();
+    }
+
+    @Override
+    public String getEmailForDoctor(long doctorId) {
+        Doctor doctor=doctorRepo.findById(doctorId).orElseThrow(()->new AuthenticationExceptions("Invalid doctorId"));
+        Optional<User> user=userRepository.findById(doctor.getUserId());
+        return user.get().getEmail();
+    }
+
+    @Override
+    public List<SearchDoctorDto> getDoctorsBySpeciality(Speciality speciality) {
+        List<Doctor>doctors=doctorRepo.findAll();
+        List<SearchDoctorDto>searchDoctorDtos=new ArrayList<>();
+        for(Doctor doctor:doctors)
+        {
+            if(doctor.getSpeciality().equals(speciality) && doctor.getSpeciality()!=null) {
+                Optional<User> user = userRepository.findById(doctor.getUserId());
+                String firstname = user.get().getFirstName();
+                String lastName = user.get().getLastName();
+                SearchDoctorDto searchDoctorDto = new SearchDoctorDto();
+                searchDoctorDto.setDoctorId(doctor.getDoctorId());
+                searchDoctorDto.setFirstName(firstname);
+                searchDoctorDto.setLastName(lastName);
+                searchDoctorDto.setSpeciality(doctor.getSpeciality());
+                searchDoctorDtos.add((searchDoctorDto));
+            }
+        }
+        return searchDoctorDtos;
+    }
+
+    @Override
+    public List<SearchDoctorDto> getDoctorsByFirstName(String name) {
+        List<Doctor>doctors=doctorRepo.findAll();
+        List<SearchDoctorDto>searchDoctorDtos=new ArrayList<>();
+        for(Doctor doctor:doctors)
+        {
+                Optional<User> user = userRepository.findById(doctor.getUserId());
+                String firstname = user.get().getFirstName();
+                String lastName = user.get().getLastName();
+                if(firstname.equals(name)) {
+                    SearchDoctorDto searchDoctorDto = new SearchDoctorDto();
+                    searchDoctorDto.setDoctorId(doctor.getDoctorId());
+                    searchDoctorDto.setFirstName(firstname);
+                    searchDoctorDto.setLastName(lastName);
+                    searchDoctorDto.setSpeciality(doctor.getSpeciality());
+                    searchDoctorDtos.add((searchDoctorDto));
+                }
+
+        }
+        return searchDoctorDtos;
+    }
+
 }
 
 

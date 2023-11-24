@@ -52,6 +52,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v2/getMedicineById/{id}").hasRole(Constants.ROLE_ADMIN)
                         .requestMatchers(HttpMethod.GET, "/api/v2/getAllSlotsByDoctorId/{id}").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.GET, "/api/v2/getMyAllSlots").hasRole(Constants.ROLE_DOCTOR)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getNotificationForPatient").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getNotificationForDoctor").hasRole(Constants.ROLE_DOCTOR)
+                        .requestMatchers(HttpMethod.PUT, "/api/v2/changePatientStatus/{notificationId}").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.PUT, "/api/v2/changeDoctorStatus/{notificationId}").hasRole(Constants.ROLE_DOCTOR)
 
                         .anyRequest().authenticated()
                 )
