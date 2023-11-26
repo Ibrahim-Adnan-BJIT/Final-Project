@@ -44,6 +44,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET,"/api/v2/user/getEmailForDoctor/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v2/user/getDoctorsBySpeciality/{speciality}").hasAnyRole(Constants.ROLE_PATIENT,Constants.ROLE_ADMIN)
                         .requestMatchers(HttpMethod.GET,"/api/v2/user/getDoctorsByName/{name}").hasAnyRole(Constants.ROLE_PATIENT,Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET,"/api/v2/user/getAllUsers").hasRole(Constants.ROLE_ADMIN)
                         .requestMatchers("/api/v2/user/**").permitAll()
                         .anyRequest().authenticated()
                 )

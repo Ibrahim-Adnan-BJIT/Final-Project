@@ -2,12 +2,15 @@ package com.example.ClinicalDecisionSupportSystemService.controller;
 
 import com.example.ClinicalDecisionSupportSystemService.dto.HealthDataDto;
 import com.example.ClinicalDecisionSupportSystemService.entity.HealthData;
+import com.example.ClinicalDecisionSupportSystemService.entity.PreviousHealthData;
 import com.example.ClinicalDecisionSupportSystemService.service.HealthDataService;
+import jdk.dynalink.linker.LinkerServices;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -29,4 +32,11 @@ public class HealthDataController {
         Optional<HealthData> healthData=healthDataService.getHealthData();
         return new ResponseEntity<>(healthData.get(),HttpStatus.OK);
     }
+    @GetMapping("/getHealthTrack")
+    public ResponseEntity<List<PreviousHealthData>> getHealthTrack()
+    {
+        List<PreviousHealthData>previousHealthData=healthDataService.getAllHealthTrack();
+        return new ResponseEntity<>(previousHealthData,HttpStatus.OK);
+    }
+
 }

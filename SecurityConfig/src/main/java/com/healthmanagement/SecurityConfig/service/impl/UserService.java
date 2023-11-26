@@ -1,9 +1,6 @@
 package com.healthmanagement.SecurityConfig.service.impl;
 
-import com.healthmanagement.SecurityConfig.dto.DoctorsDto;
-import com.healthmanagement.SecurityConfig.dto.ProfileDto;
-import com.healthmanagement.SecurityConfig.dto.SearchDoctorDto;
-import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
+import com.healthmanagement.SecurityConfig.dto.*;
 import com.healthmanagement.SecurityConfig.entity.*;
 import com.healthmanagement.SecurityConfig.exception.AuthenticationExceptions;
 import com.healthmanagement.SecurityConfig.exception.ResourceNotFoundException;
@@ -221,6 +218,13 @@ public class UserService implements IUserInformation {
 
         }
         return searchDoctorDtos;
+    }
+
+    @Override
+    public List<UserInfoDto> getAllUser() {
+        List<User> users=userRepository.findAll();
+       return users.stream().map((todo) -> modelMapper.map(todo, UserInfoDto.class))
+                .collect(Collectors.toList());
     }
 
 }

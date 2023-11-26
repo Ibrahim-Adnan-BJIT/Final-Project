@@ -33,6 +33,7 @@ public class SecurityConfiguration {
 
                         .requestMatchers(HttpMethod.PUT, "/api/healthdata/update/record").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.GET, "/api/healthdata/get/healthData").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.GET, "/api/healthdata/getHealthTrack").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.POST, "/api/progress/create").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.PUT, "/api/progress/update/{id}").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.GET, "/api/progress/getCompletedProgress").hasRole(Constants.ROLE_PATIENT)
@@ -42,8 +43,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "/api/recommendation/update/bmi").hasRole(Constants.ROLE_ADMIN)
                         .requestMatchers(HttpMethod.PUT, "/api/recommendation/update/diabetes").hasRole(Constants.ROLE_ADMIN)
                         .requestMatchers(HttpMethod.PUT, "/api/recommendation/update/allergy").hasRole(Constants.ROLE_ADMIN)
-                        .requestMatchers(HttpMethod.PUT, "/api/v2/user/getPatient/{id}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/recommendation/getRecommendationByPatientId").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/user/getPatient/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/recommendation/getRecommendationByPatientId").hasRole(Constants.ROLE_PATIENT)
 
 
 

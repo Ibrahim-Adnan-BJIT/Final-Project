@@ -37,14 +37,14 @@ public class SecurityConfiguration {
 
                         .requestMatchers(HttpMethod.POST, "/api/community/create/post/{id}").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.PUT, "/api/community/update/post/{postId}").hasRole(Constants.ROLE_PATIENT)
-                        .requestMatchers(HttpMethod.DELETE, "/api/community/delete/post/{id}").hasRole(Constants.ROLE_PATIENT)
-                        .requestMatchers(HttpMethod.GET, "/api/community/getByPatientIdAndGroupId/{groupId}").hasRole(Constants.ROLE_PATIENT)
-                        .requestMatchers(HttpMethod.GET, "/api/community/getByGroupId/{groupId}").hasRole(Constants.ROLE_PATIENT)
-                        .requestMatchers(HttpMethod.PUT, "/api/community/upVotes/{id}").hasRole(Constants.ROLE_PATIENT)
-                        .requestMatchers(HttpMethod.PUT, "/api/community/downVotes/{id}").hasRole(Constants.ROLE_PATIENT)
-                        .requestMatchers(HttpMethod.GET, "/api/community/getAllUpVotes/{id}").hasRole(Constants.ROLE_PATIENT)
-                        .requestMatchers(HttpMethod.GET, "/api/community/getAllDownVotes/{id}").hasRole(Constants.ROLE_PATIENT)
-                        .requestMatchers(HttpMethod.GET, "/api/community/getSinglePost/{id}").hasRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.DELETE, "/api/community/delete/post/{id}").hasAnyRole(Constants.ROLE_PATIENT,Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/community/getByPatientIdAndGroupId/{groupId}").hasAnyRole(Constants.ROLE_PATIENT,Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/community/getByGroupId/{groupId}").hasAnyRole(Constants.ROLE_PATIENT,Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/api/community/upVotes/{id}").hasAnyRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.PUT, "/api/community/downVotes/{id}").hasAnyRole(Constants.ROLE_PATIENT)
+                        .requestMatchers(HttpMethod.GET, "/api/community/getAllUpVotes/{id}").hasAnyRole(Constants.ROLE_PATIENT,Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/community/getAllDownVotes/{id}").hasAnyRole(Constants.ROLE_PATIENT,Constants.ROLE_ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/community/getSinglePost/{id}").hasAnyRole(Constants.ROLE_PATIENT,Constants.ROLE_ADMIN)
 
 
                         .anyRequest().authenticated()

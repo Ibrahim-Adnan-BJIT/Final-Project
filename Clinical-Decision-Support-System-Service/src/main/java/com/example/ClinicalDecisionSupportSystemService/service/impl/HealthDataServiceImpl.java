@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ public class HealthDataServiceImpl implements HealthDataService {
     private BloodPressureRecommendationRepo bloodPressureRecommendationRepo;
     private DiabetesRecommendationRepo diabetesRecommendationRepo;
     private AllergyRecommendationRepo allergyRecommendationRepo;
+    private PreviousHealthDataRepo previousHealthDataRepo;
     @Override
     public void storeHealthData(HealthDataDto healthDataDto) {
         Optional<HealthData> healthData=healthDataRepo.findById(1L);
@@ -34,6 +36,8 @@ public class HealthDataServiceImpl implements HealthDataService {
                 .retrieve()
                 .bodyToMono(Long.class)
                 .block();
+
+
         if(healthData.isEmpty())
         {
             HealthData healthData1=new HealthData();
@@ -52,6 +56,8 @@ public class HealthDataServiceImpl implements HealthDataService {
           healthData1.setBloodPressure(healthData1.getBloodPressure());
           healthDataRepo.save(healthData1);
 
+            int cnt=0; // for prediction lol..
+
             Recommendation recommendation=new Recommendation();
             recommendation.setPatientId(patientId);
 
@@ -62,26 +68,32 @@ public class HealthDataServiceImpl implements HealthDataService {
                 if(bmi<18.5)
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getUnderweight());
+
                 }
                 else if(bmi>=18.5 && bmi<=24.9)
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getNormalWeight());
+                    ++cnt;
                 }
                 else if(bmi>=25 && bmi<=29.9)
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getOverweight());
+
                 }
                 else if(bmi>=30 && bmi <=34.9)
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getObesityClassI());
+                    --cnt;
                 }
                 else if(bmi>=35 && bmi<=39.9)
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getObesityClassII());
+                    cnt-=2;
                 }
                 else
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getObesityClassIII());
+                    cnt-=3;
                 }
             }
 
@@ -91,14 +103,19 @@ public class HealthDataServiceImpl implements HealthDataService {
             for (BloodPressureRecommendation bloodPressureRecommendation : bloodPressureRecommendations) {
                 if (bloodPressure == BloodPressure.NORMAL) {
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getNormal());
+                    ++cnt;
                 } else if (bloodPressure == BloodPressure.ELEVATED) {
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getElevated());
+
                 } else if (bloodPressure == BloodPressure.HYPERTENSION_STAGE_1) {
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getHypertension_stage_1());
+                    --cnt;
                 } else if (bloodPressure == BloodPressure.HYPERTENSION_STAGE_2) {
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getHypertension_stage_2());
+                    cnt-=2;
                 } else
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getHypertensive_crisis());
+                cnt-=3;
                 }
                 // Handle the default case if needed
 
@@ -111,18 +128,25 @@ public class HealthDataServiceImpl implements HealthDataService {
 
                     if (allergy == Allergy.GLUTEN) {
                         recommendation.setAllergyRecom(allergyRecommendation.getGluten());
+
                     } else if (allergy == Allergy.PEANUT) {
                         recommendation.setAllergyRecom(allergyRecommendation.getPeanut());
+
                     } else if (allergy == Allergy.LACTOSE) {
                         recommendation.setAllergyRecom(allergyRecommendation.getLactose());
+
                     } else if (allergy == Allergy.SHELLFISH) {
                         recommendation.setAllergyRecom(allergyRecommendation.getShellfish());
+
                     } else if (allergy == Allergy.TREE_NUT) {
                         recommendation.setAllergyRecom(allergyRecommendation.getTree_nut());
+
                     } else if (allergy == Allergy.EGG) {
                         recommendation.setAllergyRecom(allergyRecommendation.getEgg());
+
                     } else if (allergy == Allergy.SOY) {
                         recommendation.setAllergyRecom(allergyRecommendation.getSoy());
+
                     }
                 }
 
@@ -132,17 +156,40 @@ public class HealthDataServiceImpl implements HealthDataService {
 
                 if (diabetesType == Diabetes.NORMAL) {
                     recommendation.setDiabetesRecom(diabetesRecommendation.getNormal());
+                    ++cnt;
                 } else if (diabetesType == Diabetes.TYPE_1) {
                     recommendation.setDiabetesRecom(diabetesRecommendation.getType1());
+                    --cnt;
                 } else if (diabetesType == Diabetes.TYPE_2) {
                     recommendation.setDiabetesRecom(diabetesRecommendation.getType2());
+                    cnt-=2;
                 }
             }
+            PreviousHealthData previousHealthData=new PreviousHealthData();
+            if(cnt<0 && cnt>=-2)
+            {
+                previousHealthData.setState(State.POOR);
+            }
+            else if(cnt<-2 && cnt>=-4)
+                previousHealthData.setState(State.VERY_POOR);
+            else if(cnt<-4)
+                previousHealthData.setState(State.CONSULT_A_DOCTOR);
+            else if(cnt>=0 && cnt<2)
+                previousHealthData.setState(State.NORMAL);
+            else if(cnt>=2 && cnt<4)
+                previousHealthData.setState(State.GOOD);
+            else
+                previousHealthData.setState(State.VERY_GOOD);
+
+            previousHealthData.setDate(LocalDate.now());
+
+           previousHealthDataRepo.save(previousHealthData);
+
           recommendationRepo.save(recommendation);
         }
         else
         {
-
+            int cnt=0; // for prediction lol..
 
             if(healthDataDto.getWeight()<0 || healthDataDto.getHeight()<0 )
             {
@@ -170,10 +217,12 @@ public class HealthDataServiceImpl implements HealthDataService {
                 if(bmi<18.5)
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getUnderweight());
+
                 }
                 else if(bmi>=18.5 && bmi<=24.9)
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getNormalWeight());
+                    ++cnt;
                 }
                 else if(bmi>=25 && bmi<=29.9)
                 {
@@ -182,14 +231,17 @@ public class HealthDataServiceImpl implements HealthDataService {
                 else if(bmi>=30 && bmi <=34.9)
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getObesityClassI());
+                    cnt--;
                 }
                 else if(bmi>=35 && bmi<=39.9)
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getObesityClassII());
+                    cnt-=2;
                 }
                 else
                 {
                     recommendation.setBmiRecom(bmiRecommendation.getObesityClassIII());
+                    cnt-=3;
                 }
             }
 
@@ -199,14 +251,18 @@ public class HealthDataServiceImpl implements HealthDataService {
             for (BloodPressureRecommendation bloodPressureRecommendation : bloodPressureRecommendations) {
                 if (bloodPressure == BloodPressure.NORMAL) {
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getNormal());
+                    cnt++;
                 } else if (bloodPressure == BloodPressure.ELEVATED) {
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getElevated());
                 } else if (bloodPressure == BloodPressure.HYPERTENSION_STAGE_1) {
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getHypertension_stage_1());
+                    cnt-=1;
                 } else if (bloodPressure == BloodPressure.HYPERTENSION_STAGE_2) {
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getHypertension_stage_2());
+                    cnt-=2;
                 } else
                     recommendation.setBloodPressureRecom(bloodPressureRecommendation.getHypertensive_crisis());
+                cnt-=3;
             }
 
             List<AllergyRecommendation> allergies = allergyRecommendationRepo.findAll();
@@ -236,12 +292,33 @@ public class HealthDataServiceImpl implements HealthDataService {
 
                 if (diabetesType == Diabetes.NORMAL) {
                     recommendation.setDiabetesRecom(diabetesRecommendation.getNormal());
+                    ++cnt;
                 } else if (diabetesType == Diabetes.TYPE_1) {
                     recommendation.setDiabetesRecom(diabetesRecommendation.getType1());
+                    cnt-=1;
                 } else if (diabetesType == Diabetes.TYPE_2) {
                     recommendation.setDiabetesRecom(diabetesRecommendation.getType2());
+                    cnt-=2;
                 }
             }
+            PreviousHealthData previousHealthData=new PreviousHealthData();
+            if(cnt<0 && cnt>=-2)
+            {
+                previousHealthData.setState(State.POOR);
+            }
+            else if(cnt<-2 && cnt>=-4)
+                previousHealthData.setState(State.VERY_POOR);
+            else if(cnt<-4)
+                previousHealthData.setState(State.CONSULT_A_DOCTOR);
+            else if(cnt>=0 && cnt<2)
+                previousHealthData.setState(State.NORMAL);
+            else if(cnt>=2 && cnt<4)
+                previousHealthData.setState(State.GOOD);
+            else
+                previousHealthData.setState(State.VERY_GOOD);
+
+            previousHealthData.setDate(LocalDate.now());
+            previousHealthDataRepo.save(previousHealthData);
             recommendationRepo.save(recommendation);
 
         }
@@ -251,5 +328,10 @@ public class HealthDataServiceImpl implements HealthDataService {
     public Optional<HealthData> getHealthData() {
         HealthData healthData=healthDataRepo.findById(1L).orElseThrow(()->new InvalidRequestException("Enter Your health data Please"));
         return Optional.ofNullable(healthData);
+    }
+
+    @Override
+    public List<PreviousHealthData> getAllHealthTrack() {
+        return previousHealthDataRepo.findAll();
     }
 }

@@ -8,7 +8,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/Final-Term-Project.iml" filepath="$PROJECT_DIR$/.idea/Final-Term-Project.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/SecurityConfig.main.iml" filepath="$PROJECT_DIR$/.idea/modules/SecurityConfig.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/appointment-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/appointment-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/community-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/community-service.main.iml" />
     </modules>
   </component>
 </project>

@@ -1,10 +1,7 @@
 package com.healthmanagement.SecurityConfig.controller;
 
 
-import com.healthmanagement.SecurityConfig.dto.DoctorsDto;
-import com.healthmanagement.SecurityConfig.dto.ProfileDto;
-import com.healthmanagement.SecurityConfig.dto.SearchDoctorDto;
-import com.healthmanagement.SecurityConfig.dto.UserInformationsDto;
+import com.healthmanagement.SecurityConfig.dto.*;
 import com.healthmanagement.SecurityConfig.entity.Speciality;
 import com.healthmanagement.SecurityConfig.service.IUserInformation;
 import lombok.AllArgsConstructor;
@@ -104,5 +101,11 @@ public class UserController {
     {
         List<SearchDoctorDto>searchDoctorDtos=userService.getDoctorsByFirstName(name);
         return new ResponseEntity<>(searchDoctorDtos,HttpStatus.OK);
+    }
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<List<UserInfoDto>> getAllUsers()
+    {
+        List<UserInfoDto>userInformationsDtos=userService.getAllUser();
+        return new ResponseEntity<>(userInformationsDtos,HttpStatus.OK);
     }
 }
