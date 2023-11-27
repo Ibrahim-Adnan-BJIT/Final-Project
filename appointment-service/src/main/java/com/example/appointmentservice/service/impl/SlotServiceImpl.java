@@ -1,6 +1,7 @@
 package com.example.appointmentservice.service.impl;
 
 import com.example.appointmentservice.dto.AppointmentDto;
+import com.example.appointmentservice.dto.SearchDto;
 import com.example.appointmentservice.dto.SlotDto;
 import com.example.appointmentservice.entity.Slot;
 import com.example.appointmentservice.exception.InvalidRequestException;
@@ -18,6 +19,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -91,7 +93,20 @@ public class SlotServiceImpl implements SlotService {
         List<Slot> slots=slotRepo.findByDoctorId(id);
         if(slots.isEmpty())
             throw new InvalidRequestException("Invalid Doctor Id");
-       return slots;
+      List<Slot>slotList=new ArrayList<>();
+      for(Slot slot: slots)
+      {
+          if(slot.getStatus().equals("Unavailable") || slot.getStatus().equals("Booked"))
+          {
+              continue;
+          }
+          else
+          {
+              slotList.add((slot));
+          }
+
+      }
+        return slotList;
     }
 
     @Override
@@ -103,7 +118,50 @@ public class SlotServiceImpl implements SlotService {
                 .retrieve()
                 .bodyToMono(Long.class)
                 .block();
-        List<Slot>slots=slotRepo.findByDoctorId(id);
-        return slots;
+        List<Slot>slots=slotRepo.findByDoctorId(doctorId);
+        List<Slot>mySlots=new ArrayList<>();
+        for(Slot slot: slots)
+        {
+            if(!slot.getStatus().equals("Unavailable"))
+            {
+                mySlots.add(slot);
+            }
+        }
+        return mySlots;
+    }
+
+    @Override
+    public List<SearchDto> getAllSlots() {
+       List<Slot>slots=slotRepo.findAll();
+       List<SearchDto>searchDtos=new ArrayList<>();
+       for(Slot slot: slots)
+       {
+           if(slot.getStatus().equals("Available"))
+           {
+               SearchDto searchDto=new SearchDto();
+               searchDto.setDate(slot.getDate());
+               searchDto.setStatus(slot.getStatus());
+               searchDto.setType(slot.getType());
+               searchDto.setStartTime(slot.getStartTime());
+               searchDto.setEndTime(slot.getEndTime());
+               searchDto.setDoctorId(slot.getDoctorId());
+               String doctorName=webClient.get()
+                       .uri("http://localhost:9898/api/v2/user/getDoctorName/{id}", slot.getDoctorId())
+                       .retrieve()
+                       .bodyToMono(String.class)
+                       .block();
+
+               String doctorSpeciality=webClient.get()
+                       .uri("http://localhost:9898/api/v2/user/getSpeciality/{id}", slot.getDoctorId())
+                       .retrieve()
+                       .bodyToMono(String.class)
+                       .block();
+               searchDto.setDoctorName(doctorName);
+               searchDto.setSpeciality(doctorSpeciality);
+               searchDtos.add(searchDto);
+
+           }
+       }
+       return searchDtos;
     }
 }

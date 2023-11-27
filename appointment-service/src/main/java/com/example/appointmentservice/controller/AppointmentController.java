@@ -2,6 +2,7 @@ package com.example.appointmentservice.controller;
 
 import com.example.appointmentservice.dto.AppointmentDto;
 import com.example.appointmentservice.dto.ResourceAllocationDto;
+import com.example.appointmentservice.dto.SearchDto;
 import com.example.appointmentservice.dto.SlotDto;
 import com.example.appointmentservice.entity.Medicine;
 import com.example.appointmentservice.entity.Slot;
@@ -34,34 +35,34 @@ public class AppointmentController {
     public ResponseEntity<SlotDto> createSlots(@RequestBody SlotDto slotDto)
     {
         SlotDto slotDto1=slotService.createSlots(slotDto);
-        return new ResponseEntity<>(slotDto1, HttpStatus.CREATED);
+        return new ResponseEntity<>(slotDto1, HttpStatus.OK);
     }
     @PostMapping("/cancel/slots/{id}")
     public ResponseEntity<String> cancelSlots(@PathVariable long id)
     {
         slotService.cancelSlot(id);
-        return new ResponseEntity<>("Slot is canceled",HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Slot is canceled",HttpStatus.OK);
     }
 
     @PostMapping("/create/resource/{id}")
     public ResponseEntity<String> createResource(@RequestBody ResourceAllocationDto resourceAllocationDto,@PathVariable long id)
     {
         resourceAllocationService.createResource(resourceAllocationDto,id);
-        return new ResponseEntity<>("Resource Allocated Successfully",HttpStatus.CREATED);
+        return new ResponseEntity<>("Resource Allocated Successfully",HttpStatus.OK);
     }
 
     @PostMapping("/create/appointment/{id}")
     public ResponseEntity<String> createAppointment(@PathVariable long id)
     {
         appointmentService.createAppointment(id);
-        return new ResponseEntity<>("Appointment created Successfully",HttpStatus.CREATED);
+        return new ResponseEntity<>("Appointment created Successfully",HttpStatus.OK);
     }
 
     @PostMapping("/cancel/appointment/{id}")
     public ResponseEntity<String> cancelAppointment(@PathVariable long id)
     {
         appointmentService.cancelAppointment(id);
-        return new ResponseEntity<>("Appointment cancelled successfully",HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Appointment cancelled successfully",HttpStatus.OK);
     }
 
     @GetMapping("/getAllAppointmentByPatientId")
@@ -89,7 +90,7 @@ public class AppointmentController {
     public ResponseEntity<String> createMedicine(@RequestBody Medicine medicine)
     {
         medicineService.createMedicine(medicine);
-        return new ResponseEntity<>("Medicine Added ",HttpStatus.CREATED);
+        return new ResponseEntity<>("Medicine Added ",HttpStatus.OK);
     }
 
     @PutMapping("/update/medicine/{id}")
@@ -132,5 +133,11 @@ public class AppointmentController {
     {
         List<Slot>slotDtos=slotService.getMyAllSlots();
         return new ResponseEntity<>(slotDtos,HttpStatus.OK);
+    }
+    @GetMapping("/getAllSlots")
+    public ResponseEntity<List<SearchDto>> getAllSlots()
+    {
+        List<SearchDto>searchDtos=slotService.getAllSlots();
+        return new ResponseEntity<>(searchDtos,HttpStatus.OK);
     }
 }

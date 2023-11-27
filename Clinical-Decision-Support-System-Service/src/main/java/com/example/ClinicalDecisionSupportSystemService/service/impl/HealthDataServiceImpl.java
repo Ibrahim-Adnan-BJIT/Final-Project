@@ -28,7 +28,7 @@ public class HealthDataServiceImpl implements HealthDataService {
     private PreviousHealthDataRepo previousHealthDataRepo;
     @Override
     public void storeHealthData(HealthDataDto healthDataDto) {
-        Optional<HealthData> healthData=healthDataRepo.findById(1L);
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         long id1 =  Long.parseLong(authentication.getName());
         Long patientId=webClient.get()
@@ -36,7 +36,7 @@ public class HealthDataServiceImpl implements HealthDataService {
                 .retrieve()
                 .bodyToMono(Long.class)
                 .block();
-
+     Optional<HealthData> healthData= Optional.ofNullable(healthDataRepo.findByPatientId(patientId));
 
         if(healthData.isEmpty())
         {
@@ -326,7 +326,14 @@ public class HealthDataServiceImpl implements HealthDataService {
 
     @Override
     public Optional<HealthData> getHealthData() {
-        HealthData healthData=healthDataRepo.findById(1L).orElseThrow(()->new InvalidRequestException("Enter Your health data Please"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        long id1 =  Long.parseLong(authentication.getName());
+        Long patientId=webClient.get()
+                .uri("http://localhost:9898/api/v2/user/getPatient/{id}", id1)
+                .retrieve()
+                .bodyToMono(Long.class)
+                .block();
+        HealthData healthData=healthDataRepo.findByPatientId(patientId);
         return Optional.ofNullable(healthData);
     }
 

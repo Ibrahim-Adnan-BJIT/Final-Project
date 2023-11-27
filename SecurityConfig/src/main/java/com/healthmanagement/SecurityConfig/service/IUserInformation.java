@@ -30,4 +30,8 @@ public interface IUserInformation {
 
     List<UserInfoDto> getAllUser();
 
+    String getUserName(long userId);
+
+    String getSpeciality(long doctorId);
+
 }

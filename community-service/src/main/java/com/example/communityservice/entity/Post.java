@@ -19,7 +19,7 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long postId;
-    private long patientId;
+    private long userId;
     private String description;
 
     @JsonIgnore
@@ -29,4 +29,7 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Vote> votes=new ArrayList<>();
+
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL)
+    private List<Comment> comments=new ArrayList<>();
 }

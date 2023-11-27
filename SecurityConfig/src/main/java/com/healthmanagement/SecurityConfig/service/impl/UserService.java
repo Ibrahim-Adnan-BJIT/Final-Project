@@ -7,7 +7,6 @@ import com.healthmanagement.SecurityConfig.exception.ResourceNotFoundException;
 import com.healthmanagement.SecurityConfig.repository.*;
 import com.healthmanagement.SecurityConfig.service.IUserInformation;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -87,10 +86,10 @@ public class UserService implements IUserInformation {
         long id =  Long.parseLong(authentication.getName());
        Doctor doctor= doctorRepo.findByUserId(id);
        doctor.setQualification(doctorsDto.getQualification());
-       doctor.setSpeciality(Speciality.valueOf(doctorsDto.getSpeciality()));
+       doctor.setSpeciality(doctorsDto.getSpeciality());
        doctorRepo.save(doctor);
 
-        Optional<Categories> categories= Optional.ofNullable(categoriesRepo.findByCategoryName(Speciality.valueOf(doctorsDto.getSpeciality())));
+        Optional<Categories> categories= Optional.ofNullable(categoriesRepo.findByCategoryName(doctorsDto.getSpeciality()));
         if(categories.isPresent())
         {
             DoctorSpecialities doctorSpecialities=new DoctorSpecialities();
@@ -101,7 +100,7 @@ public class UserService implements IUserInformation {
         else
         {
             Categories categories1=new Categories();
-            categories1.setCategoryName(Speciality.valueOf(doctorsDto.getSpeciality()));
+            categories1.setCategoryName(doctorsDto.getSpeciality());
             categoriesRepo.save(categories1);
             DoctorSpecialities doctorSpecialities=new DoctorSpecialities();
             doctorSpecialities.setDoctorId(doctor.getDoctorId());
@@ -225,6 +224,20 @@ public class UserService implements IUserInformation {
         List<User> users=userRepository.findAll();
        return users.stream().map((todo) -> modelMapper.map(todo, UserInfoDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUserName(long userId) {
+
+        User user=userRepository.findById(userId).orElseThrow(()->new AuthenticationExceptions("Invalid User Id"));
+
+        return user.getFirstName()+" "+user.getLastName();
+    }
+
+    @Override
+    public String getSpeciality(long doctorId) {
+       Doctor doctor=doctorRepo.findById(doctorId).orElseThrow(()->new AuthenticationExceptions("Invalid DoctorId"));
+       return doctor.getSpeciality().toString();
     }
 
 }

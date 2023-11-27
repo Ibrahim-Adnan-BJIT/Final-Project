@@ -180,7 +180,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .bodyToMono(Long.class)
                 .block();
 
-        List<Appointment>appointments=appointmentRepo.findByPatientId(id1);
+        List<Appointment>appointments=appointmentRepo.findByPatientId(patientId);
        return appointments.stream().map((todo) -> modelMapper.map(todo, AppointmentDto.class))
                 .collect(Collectors.toList());
     }
@@ -195,7 +195,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .bodyToMono(Long.class)
                 .block();
 
-        List<Appointment>appointments=appointmentRepo.findByDoctorId(id1);
+        List<Appointment>appointments=appointmentRepo.findByDoctorId(doctorId);
         return appointments.stream().map((todo) -> modelMapper.map(todo, AppointmentDto.class))
                 .collect(Collectors.toList());
 

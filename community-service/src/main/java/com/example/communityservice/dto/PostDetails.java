@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 public class PostDetails {
     private String author;
-    private long patientId;
+    private long userId;
     private String description;
     private long upVote;
     private long downVote;

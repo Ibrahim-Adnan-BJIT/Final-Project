@@ -31,12 +31,7 @@ public class PostServiceImpl implements PostService {
         Group group=groupRepo.findById(id).orElseThrow(()->new InvalidRequestException("Invalid GroupId"));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         long id1 =  Long.parseLong(authentication.getName());
-        Long patientId=webClient.get()
-                .uri("http://localhost:9898/api/v2/user/getPatient/{id}", id1)
-                .retrieve()
-                .bodyToMono(Long.class)
-                .block();
-        post.setPatientId(patientId);
+        post.setUserId(id1);
         post.setGroup(group);
         postRepo.save(post);
     }
@@ -45,16 +40,11 @@ public class PostServiceImpl implements PostService {
     public void updatePosts(Post post, long postId) {
         Post post1=postRepo.findById(postId).orElseThrow(()->new InvalidRequestException("Invalid Post Id"));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        long id1 =  Long.parseLong(authentication.getName());
-        Long patientId=webClient.get()
-                .uri("http://localhost:9898/api/v2/user/getPatient/{id}", id1)
-                .retrieve()
-                .bodyToMono(Long.class)
-                .block();
-        if(post1.getPatientId()!=patientId)
-            throw new InvalidRequestException("Thats not your post");
-
+        long id =  Long.parseLong(authentication.getName());
+        if(post1.getUserId()!=id)
+        {
+            throw new InvalidRequestException("You are not authorized to update this");
+        }
         post1.setDescription(post.getDescription());
         postRepo.save(post1);
     }
@@ -69,9 +59,8 @@ public class PostServiceImpl implements PostService {
 
         if (!isAdmin(authorities)) {
             long userId = getUserId(authentication);
-            Long patientId = getPatientId(userId);
 
-            if (post.getPatientId()!=(patientId)) {
+            if (post.getUserId()!=userId) {
                 throw new InvalidRequestException("It's not your post, so don't try to delete it");
             }
         }
@@ -101,13 +90,13 @@ public class PostServiceImpl implements PostService {
        Post post=postRepo.findById(postId).orElseThrow(()->new InvalidRequestException("Invalid PostId"));
        PostDetails postDetails=new PostDetails();
        postDetails.setDescription(post.getDescription());
-       postDetails.setPatientId(post.getPatientId());
-        String patientName=webClient.get()
-                .uri("http://localhost:9898/api/v2/user/getPatientName/{id}", post.getPatientId())
+       postDetails.setUserId(post.getUserId());
+        String userName=webClient.get()
+                .uri("http://localhost:9898/api/v2/user/getUserName/"+post.getUserId())
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-        postDetails.setAuthor(patientName);
+        postDetails.setAuthor(userName);
         postDetails.setUpVote(voteService.getAllUpVotes(postId));
         postDetails.setDownVote(voteService.getAllDownVotes(postId));
         return postDetails;
@@ -118,17 +107,12 @@ public class PostServiceImpl implements PostService {
     public List<Post> getAllPostByPatientIdWithPerticularGroupId(long groupId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         long id1 =  Long.parseLong(authentication.getName());
-        Long patientId=webClient.get()
-                .uri("http://localhost:9898/api/v2/user/getPatient/{id}", id1)
-                .retrieve()
-                .bodyToMono(Long.class)
-                .block();
         Group group=groupRepo.findById(groupId).orElseThrow(()->new InvalidRequestException("Invalid GroupId"));
         List<Post>posts=postRepo.findAll();
         List<Post>postList=new ArrayList<>();
         for(Post post: posts)
         {
-            if(post.getPatientId()==patientId && post.getGroup().getGroupId()==groupId)
+            if(post.getUserId()==id1 && post.getGroup().getGroupId()==groupId)
             {
                 postList.add(post);
             }

@@ -1,8 +1,10 @@
 package com.example.communityservice.controller;
 
 import com.example.communityservice.dto.PostDetails;
+import com.example.communityservice.entity.Comment;
 import com.example.communityservice.entity.Group;
 import com.example.communityservice.entity.Post;
+import com.example.communityservice.service.CommentService;
 import com.example.communityservice.service.GroupService;
 import com.example.communityservice.service.PostService;
 import com.example.communityservice.service.VoteService;
@@ -23,6 +25,7 @@ public class CommunityController {
     private GroupService groupService;
     private PostService postService;
     private VoteService voteService;
+    private CommentService commentService;
 
 
     @PostMapping("/create/group")
@@ -120,5 +123,31 @@ public class CommunityController {
     {
         PostDetails postDetails=postService.getSinglePostDetils(id);
         return new ResponseEntity<>(postDetails,HttpStatus.OK);
+    }
+
+    @PostMapping("/create/comments/{postId}")
+    public ResponseEntity<String> createComments(@RequestBody Comment comment,@PathVariable long postId)
+    {
+        commentService.createComment(comment,postId);
+        return new ResponseEntity<>("Comment Added successfully",HttpStatus.OK);
+    }
+
+    @PutMapping("/update/comments/{commentId}")
+    public ResponseEntity<String>updateComments(@RequestBody Comment comment,@PathVariable long commentId)
+    {
+        commentService.updateComment(comment,commentId);
+        return new ResponseEntity<>("Updated Successfully",HttpStatus.OK);
+    }
+    @DeleteMapping("/delete/comments/{commentId}")
+    public ResponseEntity<String> deleteComments(@PathVariable long commentId)
+    {
+        commentService.deleteComment(commentId);
+        return new ResponseEntity<>("deleted Successfully",HttpStatus.OK);
+    }
+    @GetMapping("/getAllCommentsOfAPost/{postId}")
+    public ResponseEntity<List<Comment>> getAllCommentsOfAPost(@PathVariable long postId)
+    {
+        List<Comment> comments=commentService.getCommentByPostId(postId);
+        return new ResponseEntity<>(comments,HttpStatus.OK);
     }
 }

@@ -53,7 +53,7 @@ public class NotificationServiceImpl implements NotificationService {
         List<Notification>notificationList=new ArrayList<>();
         for(Notification notification: notifications)
         {
-            if(notification.getPatientId()==doctorId && !notification.isDoctorStatus())
+            if(notification.getDoctorId()==doctorId && !notification.isDoctorStatus())
             {
                 notificationList.add(notification);
             }

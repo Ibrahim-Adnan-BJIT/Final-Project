@@ -40,7 +40,7 @@ public class UserController {
     public  ResponseEntity<?> checkingSkills(@RequestBody DoctorsDto doctorsDto)
     {
         userService.updateSkills(doctorsDto);
-        return new ResponseEntity<>("Updated Successfully",HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Updated Successfully",HttpStatus.OK);
     }
 
     @GetMapping("/getDoctor/{id}")
@@ -107,5 +107,18 @@ public class UserController {
     {
         List<UserInfoDto>userInformationsDtos=userService.getAllUser();
         return new ResponseEntity<>(userInformationsDtos,HttpStatus.OK);
+    }
+    @GetMapping("/getUserName/{id}")
+    public ResponseEntity<String> getUserName(@PathVariable long id)
+    {
+        String name=userService.getUserName(id);
+        return new ResponseEntity<>(name,HttpStatus.OK);
+    }
+
+    @GetMapping("/getSpeciality/{id}")
+    public ResponseEntity<String> getSpeciality(@PathVariable long id)
+    {
+        String speciality=userService.getSpeciality(id);
+        return new ResponseEntity<>(speciality,HttpStatus.OK);
     }
 }

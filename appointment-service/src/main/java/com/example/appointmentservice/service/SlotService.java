@@ -1,5 +1,6 @@
 package com.example.appointmentservice.service;
 
+import com.example.appointmentservice.dto.SearchDto;
 import com.example.appointmentservice.dto.SlotDto;
 import com.example.appointmentservice.entity.Slot;
 
@@ -13,4 +14,5 @@ public interface SlotService {
     List<Slot> getAllSlotsByDoctorId(long id);
 
     List<Slot> getMyAllSlots();
+    List<SearchDto> getAllSlots();
 }

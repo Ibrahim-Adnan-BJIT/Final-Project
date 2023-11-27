@@ -25,20 +25,17 @@ public class VoteServiceImpl implements VoteService {
     public void upVotes(long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         long id1 =  Long.parseLong(authentication.getName());
-        Long patientId=webClient.get()
-                .uri("http://localhost:9898/api/v2/user/getPatient/{id}", id1)
-                .retrieve()
-                .bodyToMono(Long.class)
-                .block();
+
         Post post=postRepo.findById(postId).orElseThrow(()->new InvalidRequestException("Invalid PostId"));
-        Optional<Vote> vote1= Optional.ofNullable(voteRepo.findByPatientId(patientId));
+        Optional<Vote> vote1= Optional.ofNullable(voteRepo.findByUserId(id1));
         if(vote1.isEmpty()){
         Vote vote=new Vote();
        vote.setUpVote(true);
        vote.setDownVote(false);
-        vote.setPatientId(patientId);
+        vote.setUserId(id1);
         vote.setPost(post);
-        voteRepo.save(vote);}
+        voteRepo.save(vote);
+        }
         else
         {
             vote1.get().setUpVote(true);
@@ -52,18 +49,14 @@ public class VoteServiceImpl implements VoteService {
     public void downVote(long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         long id1 =  Long.parseLong(authentication.getName());
-        Long patientId=webClient.get()
-                .uri("http://localhost:9898/api/v2/user/getPatient/{id}", id1)
-                .retrieve()
-                .bodyToMono(Long.class)
-                .block();
+
         Post post=postRepo.findById(postId).orElseThrow(()->new InvalidRequestException("Invalid PostId"));
-        Optional<Vote> vote1= Optional.ofNullable(voteRepo.findByPatientId(patientId));
+        Optional<Vote> vote1= Optional.ofNullable(voteRepo.findByUserId(id1));
         if(vote1.isEmpty()){
             Vote vote=new Vote();
             vote.setUpVote(false);
             vote.setDownVote(true);
-            vote.setPatientId(patientId);
+            vote.setUserId(id1);
             vote.setPost(post);
             voteRepo.save(vote);}
         else

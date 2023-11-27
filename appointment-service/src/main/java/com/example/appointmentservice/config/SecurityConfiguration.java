@@ -56,6 +56,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v2/getNotificationForDoctor").hasRole(Constants.ROLE_DOCTOR)
                         .requestMatchers(HttpMethod.PUT, "/api/v2/changePatientStatus/{notificationId}").hasRole(Constants.ROLE_PATIENT)
                         .requestMatchers(HttpMethod.PUT, "/api/v2/changeDoctorStatus/{notificationId}").hasRole(Constants.ROLE_DOCTOR)
+                        .requestMatchers(HttpMethod.GET, "/api/v2/getAllSlots").permitAll()
 
                         .anyRequest().authenticated()
                 )

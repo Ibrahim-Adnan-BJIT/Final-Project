@@ -1,5 +1,8 @@
 package com.healthmanagement.SecurityConfig.dto;
 
+import com.healthmanagement.SecurityConfig.entity.Speciality;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 @NoArgsConstructor
@@ -10,6 +13,7 @@ import lombok.*;
 @Getter
 public class DoctorsDto {
     private long doctorId;
-    private String speciality;
+    @Enumerated(EnumType.STRING)
+    private Speciality speciality;
     private String qualification;
 }

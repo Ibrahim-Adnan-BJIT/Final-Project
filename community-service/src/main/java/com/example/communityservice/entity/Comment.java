@@ -5,23 +5,22 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "votes")
+@Table(name = "comments")
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Builder
+@Setter
 @Getter
-public class Vote {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long voteId;
+    private long commentId;
+    private String description;
     private long userId;
-    private boolean upVote;
-    private boolean downVote;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post post;
+    private Post posts;
 
 
 }
